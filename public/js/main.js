@@ -516,23 +516,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const koreanName = item.korean_name || item.symbol;
             
             // 해외 가격 계산 (실제 환율 1468원/USDT 기준)
-            const exchangeRate = 1468; // USDT → KRW 환율
-            const usdtPrice = 1.39; // XRP/USDT 가격 (예시)
-            const internationalPriceKRW = Math.round(usdtPrice * exchangeRate);
+            const exchangeRate = 1468.08; // USDT → KRW 환율
+            // 실제 해외 가격 시뮬레이션 (국내가격보다 약간 높게)
+            const internationalPriceKRW = Math.round(item.price * 1.01); // 국내가격보다 1% 높게
             
             // 김프 계산 (국내가격 ÷ 해외환산가격 - 1) × 100
             const kimpValue = ((item.price / internationalPriceKRW - 1) * 100).toFixed(2);
             const kimpClassActual = kimpValue >= 0 ? 'positive' : 'negative';
             const kimpSignActual = kimpValue >= 0 ? '+' : '';
             
-            // 전일대비 (실제 가격 변화)
-            const priceChange = -8; // 8원 하락 (예시)
-            const priceChangeFormatted = priceChange >= 0 ? `+${priceChange.toFixed(3)}` : priceChange.toFixed(3);
-            const priceChangeClass = priceChange >= 0 ? 'positive' : 'negative';
+            // 전일대비 (해외 전일대비 시뮬레이션)
+            const internationalChange = item.change + (Math.random() * 0.5 - 0.25); // 국내보다 약간 다르게
+            const internationalChangeClass = internationalChange >= 0 ? 'positive' : 'negative';
+            const internationalChangeSign = internationalChange >= 0 ? '+' : '';
             
             // 거래대금 단위 변환 (억 단위)
             const domesticVolume = Math.round(item.volume / 1000000000);
-            const internationalVolume = 1750; // 글로벌 거래대금 (억 단위, 예시)
+            const internationalVolume = Math.round(domesticVolume * 1.2); // 글로벌 거래대금 (국내보다 20% 많게)
             
             // 국내 거래소 데이터 (윗줄)
             html += `
@@ -545,7 +545,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     </td>
                     <td>
                         <div class="kimp-value ${kimpClassActual}">${kimpSignActual}${kimpValue}%</div>
-                        <div class="exchange-rate">$${exchangeRate.toFixed(2)}</div>
                     </td>
                     <td>
                         <div class="change-value ${changeClass}">${changeSign}${item.change.toFixed(2)}%</div>
@@ -566,11 +565,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="price-krw">${internationalPriceKRW.toLocaleString()}</div>
                     </td>
                     <td>
-                        <div class="kimp-value">-</div>
-                        <div class="exchange-rate">-</div>
+                        <div class="exchange-rate">$${exchangeRate.toFixed(2)}</div>
                     </td>
                     <td>
-                        <div class="price-change ${priceChangeClass}">${priceChangeFormatted}</div>
+                        <div class="change-value ${internationalChangeClass}">${internationalChangeSign}${internationalChange.toFixed(2)}%</div>
                     </td>
                     <td>
                         <div class="volume-krw">${internationalVolume.toLocaleString()}<span class="volume-unit">억</span></div>
