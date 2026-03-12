@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지원 - 김프(GIMP)</title>
+    <link rel="stylesheet" href="/design-system.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🎨</span>
+                    <span class="logo-text">김프(GIMP)</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link">홈</a>
+                <a href="/features.html" class="nav-link">기능</a>
+                <a href="/docs.html" class="nav-link">문서</a>
+                <a href="/community.html" class="nav-link">커뮤니티</a>
+                <a href="/support.html" class="nav-link active">지원</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="theme-toggle">🌙</button>
+                <button class="btn btn-primary" id="login-btn">로그인</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 지원 페이지 히어로 -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">지원 센터</h1>
+            <p class="hero-subtitle">도움이 필요하신가요? 여기에서 해결책을 찾아보세요</p>
+        </div>
+    </section>
+
+    <!-- FAQ 섹션 -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">자주 묻는 질문 (FAQ)</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        김프는 무료인가요?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>네, 김프는 완전히 무료 오픈소스 소프트웨어입니다. 상업적 사용을 포함한 모든 용도로 무료로 사용할 수 있습니다.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        어떤 운영체제를 지원하나요?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>김프는 Windows, macOS, Linux를 모두 지원합니다. 공식 웹사이트에서 각 운영체제에 맞는 버전을 다운로드할 수 있습니다.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        포토샵 파일을 열 수 있나요?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>네, 김프는 PSD 파일을 읽고 쓸 수 있습니다. 하지만 일부 고급 기능은 호환되지 않을 수 있습니다.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        김프를 배우려면 어떻게 해야 하나요?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>공식 문서 페이지에서 튜토리얼을 확인하거나, 커뮤니티 포럼에서 질문할 수 있습니다. YouTube에도 많은 학습 자료가 있습니다.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        버그를 발견했을 때는 어떻게 해야 하나요?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>GitHub 이슈 트래커에서 버그를 보고하거나, 커뮤니티 포럼에 게시할 수 있습니다. 가능한 상세한 정보를 포함해주세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 지원 채널 -->
+    <section class="support-channels">
+        <div class="container">
+            <h2 class="section-title">지원 채널</h2>
+            <p class="section-subtitle">다양한 방법으로 도움을 받으세요</p>
+            
+            <div class="channels-grid">
+                <div class="channel-card">
+                    <div class="channel-icon">📚</div>
+                    <h3>공식 문서</h3>
+                    <p>상세한 사용자 가이드와 튜토리얼</p>
+                    <a href="/docs.html" class="btn btn-outline">문서 보기</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon">💬</div>
+                    <h3>커뮤니티 포럼</h3>
+                    <p>다른 사용자들과 질문하고 답변하기</p>
+                    <a href="/community.html" class="btn btn-outline">포럼 방문</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon">🐙</div>
+                    <h3>GitHub 이슈</h3>
+                    <p>버그 보고 및 기능 요청</p>
+                    <a href="#" class="btn btn-outline">이슈 보고</a>
+                </div>
+                
+                <div class="channel-card">
+                    <div class="channel-icon">📧</div>
+                    <h3>이메일 지원</h3>
+                    <p>공식 지원 팀에 문의하기</p>
+                    <a href="mailto:support@gimp.org" class="btn btn-outline">이메일 보내기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 문제 해결 가이드 -->
+    <section class="troubleshooting">
+        <div class="container">
+            <h2 class="section-title">일반적인 문제 해결</h2>
+            
+            <div class="troubleshooting-grid">
+                <div class="troubleshooting-card">
+                    <h3>김프가 느리게 실행됩니다</h3>
+                    <ul>
+                        <li>최신 버전으로 업데이트하세요</li>
+                        <li>시스템 메모리를 확인하세요</li>
+                        <li>불필요한 플러그인을 비활성화하세요</li>
+                        <li>캐시를 정리하세요</li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshooting-card">
+                    <h3>이미지가 제대로 표시되지 않습니다</h3>
+                    <ul>
+                        <li>파일 형식을 확인하세요</li>
+                        <li>색상 프로필을 확인하세요</li>
+                        <li>이미지 해상도를 확인하세요</li>
+                        <li>GPU 가속을 활성화하세요</li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshooting-card">
+                    <h3>플러그인이 작동하지 않습니다</h3>
+                    <ul>
+                        <li>플러그인 버전을 확인하세요</li>
+                        <li>김프 버전과 호환되는지 확인하세요</li>
+                        <li>플러그인 디렉토리 위치를 확인하세요</li>
+                        <li>로그 파일을 확인하세요</li>
+                    </ul>
+                </div>
+                
+                <div class="troubleshooting-card">
+                    <h3>설치 중 오류가 발생합니다</h3>
+                    <ul>
+                        <li>시스템 요구사항을 확인하세요</li>
+                        <li>이전 버전을 완전히 제거하세요</li>
+                        <li>관리자 권한으로 설치하세요</li>
+                        <li>안티바이러스를 일시적으로 비활성화하세요</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🎨</span>
+                        <span class="logo-text">김프(GIMP)</span>
+                    </div>
+                    <p class="footer-description">무료 오픈소스 이미지 편집 소프트웨어</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>다운로드</h4>
+                        <a href="/">Windows</a>
+                        <a href="/">macOS</a>
+                        <a href="/">Linux</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>커뮤니티</h4>
+                        <a href="/community.html">포럼</a>
+                        <a href="/community.html">위키</a>
+                        <a href="/community.html">기여하기</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>지원</h4>
+                        <a href="/docs.html">문서</a>
+                        <a href="/docs.html">튜토리얼</a>
+                        <a href="/support.html">FAQ</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 김프(GIMP) 프로젝트. 모든 권리 보유.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Twitter</a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/src/js/main.js"></script>
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const answer = faqItem.querySelector('.faq-answer');
+                const toggle = faqItem.querySelector('.faq-toggle');
+                
+                // 닫혀있으면 열기
+                if (!faqItem.classList.contains('active')) {
+                    // 모든 FAQ 닫기
+                    document.querySelectorAll('.faq-item').forEach(item => {
+                        item.classList.remove('active');
+                        item.querySelector('.faq-toggle').textContent = '+';
+                    });
+                    
+                    // 현재 FAQ 열기
+                    faqItem.classList.add('active');
+                    toggle.textContent = '−';
+                } else {
+                    // 현재 FAQ 닫기
+                    faqItem.classList.remove('active');
+                    toggle.textContent = '+';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

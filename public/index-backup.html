@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김프(GIMP) 튜토리얼 & 커뮤니티</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="fas fa-paint-brush"></i>
+                <span>김프(GIMP)</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">홈</a>
+                <a href="#tutorials" class="nav-link">튜토리얼</a>
+                <a href="#resources" class="nav-link">자료실</a>
+                <a href="#gallery" class="nav-link">갤러리</a>
+                <a href="#community" class="nav-link">커뮤니티</a>
+                <a href="#about" class="nav-link">소개</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="btn-icon" aria-label="테마 변경">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="auth-btn" class="btn btn-outline">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>로그인</span>
+                </button>
+                <button class="menu-toggle" aria-label="메뉴 토글">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 헤더 -->
+    <header class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">김프(GIMP)로 시작하는 디지털 아트</h1>
+                <p class="hero-subtitle">무료 오픈소스 이미지 편집기의 모든 것</p>
+                <p class="hero-description">
+                    단계별 튜토리얼, 다양한 자료, 활발한 커뮤니티와 함께<br>
+                    GIMP를 마스터해보세요.
+                </p>
+                <div class="hero-actions">
+                    <a href="#tutorials" class="btn btn-primary">
+                        <i class="fas fa-play-circle"></i>
+                        튜토리얼 시작하기
+                    </a>
+                    <a href="#community" class="btn btn-outline">
+                        <i class="fas fa-users"></i>
+                        커뮤니티 참여
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-placeholder">
+                    <i class="fas fa-image"></i>
+                    <span>GIMP 작업 예시 이미지</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 주요 섹션 -->
+    <main class="main-content">
+        <!-- 튜토리얼 섹션 -->
+        <section class="section" id="tutorials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">튜토리얼</h2>
+                    <p class="section-subtitle">초보자부터 전문가까지 단계별 학습</p>
+                </div>
+                
+                <div class="tutorial-grid">
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fas fa-baby"></i>
+                        </div>
+                        <h3 class="tutorial-title">기초 과정</h3>
+                        <p class="tutorial-description">
+                            GIMP 인터페이스, 기본 도구 사용법, 간단한 편집 기법을 배웁니다.
+                        </p>
+                        <a href="#" class="tutorial-link">시작하기 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3 class="tutorial-title">중급 과정</h3>
+                        <p class="tutorial-description">
+                            레이어, 마스크, 필터 등 고급 기능을 활용한 전문적인 편집 기술.
+                        </p>
+                        <a href="#" class="tutorial-link">학습하기 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3 class="tutorial-title">고급 과정</h3>
+                        <p class="tutorial-description">
+                            합성, 리터칭, 디지털 페인팅 등 전문가 수준의 창작 기술.
+                        </p>
+                        <a href="#" class="tutorial-link">도전하기 <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 자료실 섹션 -->
+        <section class="section section-alt" id="resources">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">자료실</h2>
+                    <p class="section-subtitle">무료 브러시, 텍스처, 플러그인 다운로드</p>
+                </div>
+                
+                <div class="resource-categories">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3 class="category-title">브러시</h3>
+                        <p class="category-count">150+ 무료 브러시</p>
+                    </div>
+                    
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        <h3 class="category-title">텍스처</h3>
+                        <p class="category-count">80+ 고품질 텍스처</p>
+                    </div>
+                    
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <h3 class="category-title">플러그인</h3>
+                        <p class="category-count">30+ 유용한 플러그인</p>
+                    </div>
+                    
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <h3 class="category-title">폰트</h3>
+                        <p class="category-count">50+ 무료 폰트</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 커뮤니티 섹션 -->
+        <section class="section" id="community">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">커뮤니티</h2>
+                    <p class="section-subtitle">함께 배우고 성장하는 공간</p>
+                </div>
+                
+                <div class="community-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="feature-title">포럼</h3>
+                        <p class="feature-description">
+                            질문하고 답변하며 지식을 나누세요.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 class="feature-title">갤러리</h3>
+                        <p class="feature-description">
+                            작품을 공유하고 피드백을 받아보세요.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="feature-title">챌린지</h3>
+                        <p class="feature-description">
+                            주제별 챌린지에 참여하여 실력을 향상시키세요.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="feature-title">랭킹</h3>
+                        <p class="feature-description">
+                            활동량에 따른 등급과 보상 시스템.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">김프(GIMP) 사이트</h3>
+                    <p class="footer-description">
+                        무료 오픈소스 이미지 편집기 GIMP의 한국어 튜토리얼과 커뮤니티 사이트입니다.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">빠른 링크</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">홈</a></li>
+                        <li><a href="#tutorials">튜토리얼</a></li>
+                        <li><a href="#resources">자료실</a></li>
+                        <li><a href="#gallery">갤러리</a></li>
+                        <li><a href="#community">커뮤니티</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">법적 정보</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">개인정보 처리방침</a></li>
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#">저작권 안내</a></li>
+                        <li><a href="#">문의하기</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 김프(GIMP) 튜토리얼 & 커뮤니티. 모든 권리 보유.</p>
+                <p>GIMP는 GNU 일반 공중 사용 허가서 하에 배포되는 자유 소프트웨어입니다.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK 및 앱 스크립트 -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html><!-- Build: 2026-03-12 22:39:19 -->

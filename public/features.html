@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기능 소개 - 김프(GIMP)</title>
+    <link rel="stylesheet" href="/design-system.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🎨</span>
+                    <span class="logo-text">김프(GIMP)</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link">홈</a>
+                <a href="/features.html" class="nav-link active">기능</a>
+                <a href="/docs.html" class="nav-link">문서</a>
+                <a href="/community.html" class="nav-link">커뮤니티</a>
+                <a href="/support.html" class="nav-link">지원</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="theme-toggle">🌙</button>
+                <button class="btn btn-primary" id="login-btn">로그인</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 기능 상세 페이지 히어로 -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">김프의 모든 기능</h1>
+            <p class="hero-subtitle">프로페셔널급 이미지 편집을 위한 완벽한 도구 모음</p>
+        </div>
+    </section>
+
+    <!-- 주요 기능 섹션 -->
+    <section class="features-detail">
+        <div class="container">
+            <!-- 레이어 관리 -->
+            <div class="feature-section">
+                <div class="feature-header">
+                    <div class="feature-icon">🖼️</div>
+                    <h2>고급 레이어 관리</h2>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>다중 레이어</h3>
+                            <p>무제한 레이어 생성 및 관리</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>레이어 마스크</h3>
+                            <p>비파괴 편집을 위한 마스크 기능</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>블렌딩 모드</h3>
+                            <p>20가지 이상의 블렌딩 모드</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>레이어 그룹</h3>
+                            <p>체계적인 레이어 조직화</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 브러시 및 도구 -->
+            <div class="feature-section">
+                <div class="feature-header">
+                    <div class="feature-icon">🎨</div>
+                    <h2>풍부한 브러시 시스템</h2>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>기본 브러시</h3>
+                            <p>50가지 이상의 기본 브러시</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>사용자 정의</h3>
+                            <p>브러시 크기, 모양, 텍스처 커스터마이징</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>브러시 팩</h3>
+                            <p>커뮤니티 제작 브러시 팩 지원</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>압력 감지</h3>
+                            <p>태블릿 압력 감지 지원</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 필터 및 효과 -->
+            <div class="feature-section">
+                <div class="feature-header">
+                    <div class="feature-icon">✨</div>
+                    <h2>필터 및 효과</h2>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>블러 필터</h3>
+                            <p>가우시안, 모션, 렌즈 블러 등</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>색상 조정</h3>
+                            <p>밝기/대비, 색상 균형, 곡선</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>아티스틱 효과</h3>
+                            <p>오일 페인팅, 만화 효과 등</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>왜곡 효과</h3>
+                            <p>파도, 구부리기, 원근 왜곡</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 파일 형식 지원 -->
+            <div class="feature-section">
+                <div class="feature-header">
+                    <div class="feature-icon">📁</div>
+                    <h2>파일 형식 지원</h2>
+                </div>
+                <div class="feature-content">
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>이미지 형식</h3>
+                            <p>JPEG, PNG, GIF, WebP, TIFF, BMP</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>PSD 호환</h3>
+                            <p>포토샵 PSD 파일 읽기/쓰기</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>RAW 지원</h3>
+                            <p>카메라 RAW 파일 지원</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>벡터 그래픽</h3>
+                            <p>SVG, PDF 가져오기/내보내기</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 비교 테이블 -->
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">김프 vs 다른 소프트웨어</h2>
+            
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>기능</th>
+                            <th>김프(GIMP)</th>
+                            <th>포토샵</th>
+                            <th>무료 대안</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>가격</td>
+                            <td>✅ 완전 무료</td>
+                            <td>💲 월 $20.99</td>
+                            <td>✅ 무료</td>
+                        </tr>
+                        <tr>
+                            <td>레이어</td>
+                            <td>✅ 완벽 지원</td>
+                            <td>✅ 완벽 지원</td>
+                            <td>✅ 지원</td>
+                        </tr>
+                        <tr>
+                            <td>필터</td>
+                            <td>✅ 150+ 필터</td>
+                            <td>✅ 200+ 필터</td>
+                            <td>✅ 50+ 필터</td>
+                        </tr>
+                        <tr>
+                            <td>플러그인</td>
+                            <td>✅ 1000+</td>
+                            <td>✅ 500+</td>
+                            <td>✅ 100+</td>
+                        </tr>
+                        <tr>
+                            <td>커뮤니티</td>
+                            <td>✅ 활발한 커뮤니티</td>
+                            <td>✅ 대규모 커뮤니티</td>
+                            <td>✅ 중규모 커뮤니티</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🎨</span>
+                        <span class="logo-text">김프(GIMP)</span>
+                    </div>
+                    <p class="footer-description">무료 오픈소스 이미지 편집 소프트웨어</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>다운로드</h4>
+                        <a href="/">Windows</a>
+                        <a href="/">macOS</a>
+                        <a href="/">Linux</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>커뮤니티</h4>
+                        <a href="/community.html">포럼</a>
+                        <a href="/community.html">위키</a>
+                        <a href="/community.html">기여하기</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>지원</h4>
+                        <a href="/docs.html">문서</a>
+                        <a href="/docs.html">튜토리얼</a>
+                        <a href="/support.html">FAQ</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 김프(GIMP) 프로젝트. 모든 권리 보유.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Twitter</a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/src/js/main.js"></script>
+</body>
+</html>

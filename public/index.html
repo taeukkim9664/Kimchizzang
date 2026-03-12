@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김프(GIMP) - 무료 이미지 편집 소프트웨어</title>
+    <!-- Critical CSS (인라인) -->
+    <style>
+        /* Critical CSS - 초기 렌더링에 필요한 최소한의 CSS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; color: #1E293B; background: #FFFFFF; line-height: 1.6; }
+        .navbar { background: #F8FAFC; border-bottom: 1px solid #E2E8F0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .nav-brand .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #1E293B; font-weight: 700; font-size: 1.5rem; }
+        .hero { padding: 4rem 2rem; background: linear-gradient(135deg, #4A90E2 0%, #7B68EE 100%); color: white; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
+        .hero-subtitle { font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9; }
+        .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; text-decoration: none; transition: 150ms ease; text-align: center; }
+        .btn-primary { background: #4A90E2; color: white; }
+        .btn-primary:hover { background: #357ABD; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .btn-outline { background: transparent; color: #4A90E2; border: 2px solid #4A90E2; }
+        .btn-outline:hover { background: #4A90E2; color: white; }
+    </style>
+    
+    <!-- 나머지 CSS (지연 로딩) -->
+    <link rel="preload" href="/design-system.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/styles/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="/design-system.css">
+        <link rel="stylesheet" href="/styles/main.css">
+    </noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">
+                    <span class="logo-icon">🎨</span>
+                    <span class="logo-text">김프(GIMP)</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">기능</a>
+                <a href="#download" class="nav-link">다운로드</a>
+                <a href="#community" class="nav-link">커뮤니티</a>
+                <a href="#docs" class="nav-link">문서</a>
+                <a href="#support" class="nav-link">지원</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="theme-toggle">🌙</button>
+                <button class="btn btn-primary" id="login-btn">로그인</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">무료로 시작하는<br>프로페셔널 이미지 편집</h1>
+                <p class="hero-subtitle">김프(GIMP)는 오픈소스 이미지 편집 소프트웨어로, 포토샵의 강력한 대안입니다.</p>
+                <div class="hero-actions">
+                    <a href="#download" class="btn btn-primary btn-lg">무료 다운로드</a>
+                    <a href="#features" class="btn btn-outline btn-lg">기능 살펴보기</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">2M+</span>
+                        <span class="stat-label">월간 사용자</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">무료</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">20+</span>
+                        <span class="stat-label">언어 지원</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-placeholder">
+                    🎨 김프 인터페이스 미리보기
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 기능 소개 섹션 -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">강력한 기능들</h2>
+            <p class="section-subtitle">프로페셔널급 이미지 편집 도구를 무료로 사용해보세요</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🖼️</div>
+                    <h3 class="feature-title">고급 레이어 관리</h3>
+                    <p class="feature-description">다중 레이어, 레이어 마스크, 블렌딩 모드 등 전문가용 기능</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">풍부한 브러시</h3>
+                    <p class="feature-description">다양한 브러시와 사용자 정의 가능한 도구 모음</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3 class="feature-title">플러그인 지원</h3>
+                    <p class="feature-description">수백 가지 무료 플러그인으로 기능 확장</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">크로스 플랫폼</h3>
+                    <p class="feature-description">Windows, macOS, Linux 모두 지원</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 다운로드 섹션 -->
+    <section class="download" id="download">
+        <div class="container">
+            <h2 class="section-title">지금 다운로드</h2>
+            <p class="section-subtitle">당신의 운영체제에 맞는 버전을 선택하세요</p>
+            
+            <div class="download-options">
+                <div class="download-card">
+                    <div class="os-icon">🪟</div>
+                    <h3>Windows</h3>
+                    <p>Windows 10/11 지원</p>
+                    <button class="btn btn-primary">다운로드</button>
+                </div>
+                
+                <div class="download-card">
+                    <div class="os-icon">🍎</div>
+                    <h3>macOS</h3>
+                    <p>macOS 10.15+ 지원</p>
+                    <button class="btn btn-primary">다운로드</button>
+                </div>
+                
+                <div class="download-card">
+                    <div class="os-icon">🐧</div>
+                    <h3>Linux</h3>
+                    <p>대부분의 배포판 지원</p>
+                    <button class="btn btn-primary">다운로드</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🎨</span>
+                        <span class="logo-text">김프(GIMP)</span>
+                    </div>
+                    <p class="footer-description">무료 오픈소스 이미지 편집 소프트웨어</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>다운로드</h4>
+                        <a href="#">Windows</a>
+                        <a href="#">macOS</a>
+                        <a href="#">Linux</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>커뮤니티</h4>
+                        <a href="#">포럼</a>
+                        <a href="#">위키</a>
+                        <a href="#">기여하기</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>지원</h4>
+                        <a href="#">문서</a>
+                        <a href="#">튜토리얼</a>
+                        <a href="#">FAQ</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2026 김프(GIMP) 프로젝트. 모든 권리 보유.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Twitter</a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/src/js/main.js"></script>
+    <script>
+        // 테마 토글 기능
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            this.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+        
+        // 로그인 버튼
+        document.getElementById('login-btn').addEventListener('click', function() {
+            alert('로그인 기능 준비 중입니다!');
+        });
+    </script>
+</body>
+</html>
