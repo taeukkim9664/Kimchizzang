@@ -1,0 +1,8 @@
+{
+  "name": "gimp-website",
+  "version": "1.0.0",
+  "description": "김프(GIMP) 웹사이트",
+  "scripts": {
+    "build": "echo 'Static site - no build required'"
+  }
+}
