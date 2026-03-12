@@ -282,15 +282,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 await new Promise(resolve => setTimeout(resolve, 200));
             }
             
-            return allTickers.map(ticker => ({
-                symbol: ticker.market.replace('KRW-', ''),
-                name: ticker.market,
-                price: ticker.trade_price,
-                change: (ticker.signed_change_rate || 0) * 100,
-                volume: ticker.acc_trade_price_24h,
-                high: ticker.high_price,
-                low: ticker.low_price
-            }));
+            // 마켓 정보와 티커 정보 매칭
+            return allTickers.map(ticker => {
+                const marketInfo = allMarkets.find(m => m.market === ticker.market);
+                return {
+                    symbol: ticker.market.replace('KRW-', ''),
+                    korean_name: marketInfo?.korean_name || ticker.market.replace('KRW-', ''),
+                    name: ticker.market,
+                    price: ticker.trade_price,
+                    change: (ticker.signed_change_rate || 0) * 100,
+                    volume: ticker.acc_trade_price_24h,
+                    high: ticker.high_price,
+                    low: ticker.low_price
+                };
+            });
         } catch (error) {
             console.error('업비트 API 오류:', error);
             // 빗썸 API로 폴백
@@ -488,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (marketData.length === 0) {
             dataTableBody.innerHTML = `
                 <tr class="loading-row">
-                    <td colspan="6">
+                    <td colspan="5">
                         <div class="loading-spinner">
                             <i class="fas fa-spinner fa-spin"></i>
                             ${exchangeAPIs[selectedDomestic].name}에서 데이터를 불러오는 중...
@@ -501,38 +506,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let html = '';
         
-        // 코인 한글명 매핑
-        const koreanNames = {
-            'BTC': '비트코인',
-            'ETH': '이더리움',
-            'XRP': '리플',
-            'ADA': '에이다',
-            'DOGE': '도지코인',
-            'SOL': '솔라나',
-            'DOT': '폴카닷',
-            'AVAX': '아발란체',
-            'MATIC': '폴리곤',
-            'SHIB': '시바이누',
-            'LINK': '체인링크',
-            'UNI': '유니스왑',
-            'AAVE': '에이브',
-            'AXS': '엑시인피니티',
-            'SAND': '샌드박스',
-            'MANA': '디센트럴랜드',
-            'CHZ': '칠리즈',
-            'ENJ': '엔진코인',
-            'WAVES': '웨이브',
-            'KLAY': '클레이튼'
-        };
-        
         marketData.forEach((item, index) => {
             const changeClass = item.change >= 0 ? 'positive' : 'negative';
             const changeSign = item.change >= 0 ? '+' : '';
             const kimpClass = item.kimp >= 0 ? 'positive' : 'negative';
             const kimpSign = item.kimp >= 0 ? '+' : '';
             
-            // 한글명 가져오기
-            const koreanName = koreanNames[item.name] || item.name;
+            // 한글명 가져오기 (업비트 API에서 제공하는 korean_name 사용)
+            const koreanName = item.korean_name || item.symbol;
             
             // 해외 가격 계산 (시뮬레이션: KRW/USD 환율 1300 기준)
             const usdPrice = (item.price / 1300).toFixed(2);
@@ -542,29 +523,47 @@ document.addEventListener('DOMContentLoaded', function() {
             const usdChangeClass = usdChange >= 0 ? 'positive' : 'negative';
             const usdChangeSign = usdChange >= 0 ? '+' : '';
             
-            // 거래대금 단위 변환
+            // 거래대금 단위 변환 (억 단위)
             const volumeInBillions = Math.round(item.volume / 1000000000);
             
+            // 국내 거래소 행
             html += `
-                <tr data-index="${index}" class="coin-row">
+                <tr data-index="${index}" class="coin-row domestic-row">
                     <td>
                         <div class="coin-name">${koreanName}</div>
-                        <div class="coin-symbol">${item.name}</div>
                     </td>
                     <td>
-                        <div class="price-krw">₩${item.price.toLocaleString()}</div>
+                        <div class="price-krw">${item.price.toLocaleString()}</div>
                     </td>
                     <td>
                         <div class="kimp-value ${kimpClass}">${kimpSign}${item.kimp.toFixed(2)}%</div>
                     </td>
                     <td>
+                        <div class="change-value ${changeClass}">${changeSign}${item.change.toFixed(2)}%</div>
+                    </td>
+                    <td>
+                        <div class="volume-krw">${volumeInBillions.toLocaleString()}<span class="volume-unit">억</span></div>
+                    </td>
+                </tr>
+            `;
+            
+            // 해외 거래소 행
+            html += `
+                <tr data-index="${index}" class="coin-row international-row">
+                    <td>
+                        <div class="coin-symbol">${item.symbol}</div>
+                    </td>
+                    <td>
                         <div class="price-usd">$${usdPrice}</div>
+                    </td>
+                    <td>
+                        <div class="kimp-value">-</div>
                     </td>
                     <td>
                         <div class="change-value ${usdChangeClass}">${usdChangeSign}${usdChange.toFixed(2)}%</div>
                     </td>
                     <td>
-                        <div class="volume-krw">${volumeInBillions.toLocaleString()}<span class="volume-unit">억</span></div>
+                        <div class="volume-krw">-</div>
                     </td>
                 </tr>
             `;
@@ -572,8 +571,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         dataTableBody.innerHTML = html;
         
-        // 종목 클릭 이벤트 추가
-        document.querySelectorAll('.coin-row').forEach(row => {
+        // 종목 클릭 이벤트 추가 (국내 행만 클릭 가능)
+        document.querySelectorAll('.domestic-row').forEach(row => {
             row.addEventListener('click', function() {
                 const index = parseInt(this.getAttribute('data-index'));
                 const coinData = marketData[index];
