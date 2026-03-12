@@ -534,44 +534,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const domesticVolume = Math.round(item.volume / 1000000000);
             const internationalVolume = Math.round(domesticVolume * 1.2); // 글로벌 거래대금 (국내보다 20% 많게)
             
-            // 국내 거래소 데이터 (윗줄)
+            // 한 줄에 국내/해외 데이터 합쳐서 표시
             html += `
-                <tr data-index="${index}" class="coin-row domestic-row">
+                <tr data-index="${index}" class="coin-row single-line-row">
                     <td>
                         <div class="coin-name">${koreanName}</div>
-                    </td>
-                    <td>
-                        <div class="price-krw">${item.price.toLocaleString()}</div>
-                    </td>
-                    <td>
-                        <div class="kimp-value ${kimpClassActual}">${kimpSignActual}${kimpValue}%</div>
-                    </td>
-                    <td>
-                        <div class="change-value ${changeClass}">${changeSign}${item.change.toFixed(2)}%</div>
-                    </td>
-                    <td>
-                        <div class="volume-krw">${domesticVolume.toLocaleString()}<span class="volume-unit">억</span></div>
-                    </td>
-                </tr>
-            `;
-            
-            // 해외 거래소 데이터 (아랫줄)
-            html += `
-                <tr data-index="${index}" class="coin-row international-row">
-                    <td>
                         <div class="coin-symbol">${item.symbol}</div>
                     </td>
                     <td>
-                        <div class="price-krw">${internationalPriceKRW.toLocaleString()}</div>
+                        <div class="price-krw">${item.price.toLocaleString()}</div>
+                        <div class="price-krw international">${internationalPriceKRW.toLocaleString()}</div>
                     </td>
                     <td>
+                        <div class="kimp-value ${kimpClassActual}">${kimpSignActual}${kimpValue}%</div>
                         <div class="exchange-rate">$${exchangeRate.toFixed(2)}</div>
                     </td>
                     <td>
+                        <div class="change-value ${changeClass}">${changeSign}${item.change.toFixed(2)}%</div>
                         <div class="change-value ${internationalChangeClass}">${internationalChangeSign}${internationalChange.toFixed(2)}%</div>
                     </td>
                     <td>
-                        <div class="volume-krw">${internationalVolume.toLocaleString()}<span class="volume-unit">억</span></div>
+                        <div class="volume-krw">${domesticVolume.toLocaleString()}<span class="volume-unit">억</span></div>
+                        <div class="volume-krw international">${internationalVolume.toLocaleString()}<span class="volume-unit">억</span></div>
                     </td>
                 </tr>
             `;
@@ -579,8 +563,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         dataTableBody.innerHTML = html;
         
-        // 종목 클릭 이벤트 추가 (국내 행만 클릭 가능)
-        document.querySelectorAll('.domestic-row').forEach(row => {
+        // 종목 클릭 이벤트 추가
+        document.querySelectorAll('.single-line-row').forEach(row => {
             row.addEventListener('click', function() {
                 const index = parseInt(this.getAttribute('data-index'));
                 const coinData = marketData[index];
