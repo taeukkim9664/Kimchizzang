@@ -232,8 +232,184 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(updateChat, 2000);
     setTimeout(updateChat, 4000);
     
+    // 거래소 선택 기능
+    const domesticExchange = document.getElementById('domesticExchange');
+    const foreignExchange = document.getElementById('foreignExchange');
+    const domesticStatus = document.getElementById('domesticStatus');
+    const foreignStatus = document.getElementById('foreignStatus');
+    
+    domesticExchange.addEventListener('change', function() {
+        const exchangeName = this.options[this.selectedIndex].text;
+        domesticStatus.querySelector('.status-text').textContent = `${exchangeName} 연결됨`;
+        updateKimpCalculation();
+    });
+    
+    foreignExchange.addEventListener('change', function() {
+        const exchangeName = this.options[this.selectedIndex].text;
+        foreignStatus.querySelector('.status-text').textContent = `${exchangeName} 연결됨`;
+        updateKimpCalculation();
+    });
+    
+    function updateKimpCalculation() {
+        // 선택된 거래소에 따라 김프 계산 업데이트
+        const domestic = domesticExchange.value;
+        const foreign = foreignExchange.value;
+        console.log('김프 계산 업데이트:', domestic, 'vs', foreign);
+    }
+    
+    // 코인 검색 기능
+    const coinSearch = document.getElementById('coinSearch');
+    coinSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toUpperCase();
+        if (searchTerm.length >= 2) {
+            filterMarkets(searchTerm);
+        } else {
+            showAllMarkets();
+        }
+    });
+    
+    // 옵션 기능
+    const updateInterval = document.getElementById('updateInterval');
+    const autoRefresh = document.getElementById('autoRefresh');
+    const applyBtn = document.querySelector('.apply-btn');
+    
+    applyBtn.addEventListener('click', function() {
+        const interval = parseInt(updateInterval.value);
+        const refresh = autoRefresh.checked;
+        
+        if (interval >= 1 && interval <= 60) {
+            clearInterval(marketUpdateInterval);
+            if (refresh) {
+                marketUpdateInterval = setInterval(fetchUpbitMarkets, interval * 1000);
+            }
+            alert(`설정이 적용되었습니다: ${interval}초마다 업데이트`);
+        } else {
+            alert('업데이트 주기는 1~60초 사이로 설정해주세요.');
+        }
+    });
+    
+    // 업비트 마켓 필터 기능
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            filterMarketsByType(filter);
+        });
+    });
+    
+    // 업비트 API 데이터 가져오기
+    let marketUpdateInterval;
+    
+    async function fetchUpbitMarkets() {
+        try {
+            // 업비트 API에서 모든 마켓 정보 가져오기
+            const response = await fetch('https://api.upbit.com/v1/market/all');
+            const markets = await response.json();
+            
+            // KRW 마켓만 필터링
+            const krwMarkets = markets.filter(market => market.market.includes('KRW-'));
+            
+            // 각 마켓의 현재가 정보 가져오기
+            const marketCodes = krwMarkets.map(m => m.market).join(',');
+            const tickerResponse = await fetch(`https://api.upbit.com/v1/ticker?markets=${marketCodes}`);
+            const tickers = await tickerResponse.json();
+            
+            // 테이블 업데이트
+            updateMarketsTable(tickers);
+            
+        } catch (error) {
+            console.error('업비트 API 오류:', error);
+            showErrorInTable('업비트 API 연결 오류. 잠시 후 다시 시도해주세요.');
+        }
+    }
+    
+    function updateMarketsTable(tickers) {
+        const tableBody = document.getElementById('marketsTableBody');
+        tableBody.innerHTML = '';
+        
+        tickers.forEach(ticker => {
+            const changeRate = ((ticker.signed_change_rate || 0) * 100).toFixed(2);
+            const changeClass = changeRate >= 0 ? 'positive' : 'negative';
+            const changeSign = changeRate >= 0 ? '+' : '';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${ticker.market.replace('KRW-', '')}</strong><br><small>${ticker.market}</small></td>
+                <td>₩${ticker.trade_price.toLocaleString()}</td>
+                <td class="${changeClass}">${changeSign}${changeRate}%</td>
+                <td>₩${Math.round(ticker.acc_trade_price_24h / 1000000).toLocaleString()}백만</td>
+                <td>₩${ticker.high_price.toLocaleString()}</td>
+                <td>₩${ticker.low_price.toLocaleString()}</td>
+                <td>${ticker.acc_trade_volume_24h.toFixed(2)}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+    
+    function showErrorInTable(message) {
+        const tableBody = document.getElementById('marketsTableBody');
+        tableBody.innerHTML = `
+            <tr class="error-row">
+                <td colspan="7" style="text-align: center; padding: 3rem; color: var(--negative-color);">
+                    <i class="fas fa-exclamation-triangle"></i><br>
+                    ${message}
+                </td>
+            </tr>
+        `;
+    }
+    
+    function filterMarkets(searchTerm) {
+        const rows = document.querySelectorAll('#marketsTableBody tr');
+        rows.forEach(row => {
+            const text = row.textContent.toUpperCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    }
+    
+    function showAllMarkets() {
+        const rows = document.querySelectorAll('#marketsTableBody tr');
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+    
+    function filterMarketsByType(filter) {
+        const rows = document.querySelectorAll('#marketsTableBody tr');
+        rows.forEach(row => {
+            if (filter === 'all') {
+                row.style.display = '';
+            } else {
+                const marketCell = row.querySelector('td:first-child');
+                if (marketCell) {
+                    const marketText = marketCell.textContent;
+                    const show = filter === 'krw' ? marketText.includes('KRW') :
+                                filter === 'btc' ? marketText.includes('BTC') :
+                                filter === 'usdt' ? marketText.includes('USDT') : true;
+                    row.style.display = show ? '' : 'none';
+                }
+            }
+        });
+    }
+    
+    // 마켓 검색 기능
+    const marketSearch = document.getElementById('marketSearch');
+    marketSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toUpperCase();
+        filterMarkets(searchTerm);
+    });
+    
+    // 초기 데이터 로드
+    fetchUpbitMarkets();
+    
+    // 5초마다 자동 업데이트
+    marketUpdateInterval = setInterval(fetchUpbitMarkets, 5000);
+    
     // 페이지 로드 완료 메시지
     console.log('김치프리미엄 웹사이트 로드 완료');
     console.log('참고 사이트: theddari.com, kimpga.com');
-    console.log('트레이딩뷰 위젯 사용 중');
+    console.log('트레이딩뷰 위젯 사용 중 (USDTKRW)');
+    console.log('업비트 API 연동 완료');
 });

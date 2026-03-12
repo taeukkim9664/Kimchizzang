@@ -58,6 +58,71 @@
                     </div>
                 </div>
                 
+                <div class="exchange-controls">
+                    <div class="exchange-selectors">
+                        <div class="selector-group">
+                            <label for="domesticExchange"><i class="fas fa-home"></i> 국내 거래소</label>
+                            <select id="domesticExchange" class="exchange-select">
+                                <option value="upbit">업비트</option>
+                                <option value="bithumb">빗썸</option>
+                                <option value="coinone">코인원</option>
+                                <option value="gopax">고팍스</option>
+                            </select>
+                        </div>
+                        
+                        <div class="selector-group">
+                            <label for="foreignExchange"><i class="fas fa-globe"></i> 해외 거래소</label>
+                            <select id="foreignExchange" class="exchange-select">
+                                <option value="binance">바이낸스</option>
+                                <option value="binance_futures">바이낸스선물</option>
+                                <option value="okx">OKX</option>
+                                <option value="okx_futures">OKX선물</option>
+                                <option value="bybit">바이빗</option>
+                                <option value="bybit_futures">바이빗선물</option>
+                                <option value="bitget">비트겟</option>
+                                <option value="bitget_futures">비트겟선물</option>
+                                <option value="gate">게이트</option>
+                                <option value="gate_futures">게이트선물</option>
+                            </select>
+                        </div>
+                        
+                        <div class="connection-status">
+                            <div class="status-indicator connected" id="domesticStatus">
+                                <span class="status-dot"></span>
+                                <span class="status-text">업비트 연결됨</span>
+                            </div>
+                            <div class="status-indicator connected" id="foreignStatus">
+                                <span class="status-dot"></span>
+                                <span class="status-text">바이낸스 연결됨</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="search-options">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="coinSearch" placeholder="코인 검색 (예: BTC, ETH, XRP)">
+                        </div>
+                        
+                        <div class="options-dropdown">
+                            <button class="options-btn">
+                                <i class="fas fa-cog"></i> 옵션
+                            </button>
+                            <div class="options-menu">
+                                <div class="option-item">
+                                    <label for="updateInterval">업데이트 주기 (초)</label>
+                                    <input type="number" id="updateInterval" min="1" max="60" value="5">
+                                </div>
+                                <div class="option-item">
+                                    <label for="autoRefresh">자동 새로고침</label>
+                                    <input type="checkbox" id="autoRefresh" checked>
+                                </div>
+                                <button class="apply-btn">적용</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="chart-container">
                     <!-- TradingView Widget -->
                     <div class="tradingview-widget-container">
@@ -66,7 +131,7 @@
                         new TradingView.widget({
                             "width": "100%",
                             "height": "600",
-                            "symbol": "BTCKRW",
+                            "symbol": "USDTKRW",
                             "interval": "D",
                             "timezone": "Asia/Seoul",
                             "theme": "light",
@@ -75,12 +140,7 @@
                             "toolbar_bg": "#f1f3f6",
                             "enable_publishing": false,
                             "allow_symbol_change": true,
-                            "container_id": "tradingview_chart",
-                            "studies": [
-                                "MACD@tv-basicstudies",
-                                "RSI@tv-basicstudies",
-                                "Volume@tv-basicstudies"
-                            ]
+                            "container_id": "tradingview_chart"
                         });
                         </script>
                     </div>
@@ -148,6 +208,52 @@
                             <span class="volume">24h 볼륨: ₩15.3조</span>
                         </div>
                     </div>
+                </div>
+            </section>
+            
+            <!-- 업비트 종목 섹션 -->
+            <section id="upbit-markets" class="markets-section">
+                <h2><i class="fas fa-coins"></i> 업비트 종목 실시간 가격</h2>
+                <div class="markets-controls">
+                    <div class="market-filter">
+                        <button class="filter-btn active" data-filter="all">전체</button>
+                        <button class="filter-btn" data-filter="krw">원화마켓</button>
+                        <button class="filter-btn" data-filter="btc">BTC마켓</button>
+                        <button class="filter-btn" data-filter="usdt">USDT마켓</button>
+                    </div>
+                    <div class="market-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="marketSearch" placeholder="종목 검색">
+                    </div>
+                </div>
+                <div class="markets-table-container">
+                    <table class="markets-table">
+                        <thead>
+                            <tr>
+                                <th>종목</th>
+                                <th>현재가</th>
+                                <th>변동률</th>
+                                <th>거래대금</th>
+                                <th>고가</th>
+                                <th>저가</th>
+                                <th>24h 거래량</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marketsTableBody">
+                            <!-- 업비트 API 데이터가 여기에 로드됩니다 -->
+                            <tr class="loading-row">
+                                <td colspan="7">
+                                    <div class="loading-spinner">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        업비트 API에서 데이터를 불러오는 중...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="markets-info">
+                    <p><i class="fas fa-info-circle"></i> 업비트 API를 사용한 실시간 데이터입니다. 5초마다 자동 업데이트됩니다.</p>
                 </div>
             </section>
             
