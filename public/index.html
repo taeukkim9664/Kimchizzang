@@ -163,6 +163,106 @@
         </div>
     </footer>
 
+    <!-- 종목 상세 정보 모달 -->
+    <div id="coinModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCoinName">BTC</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- 입출금 정보 -->
+                <div class="deposit-section">
+                    <h3><i class="fas fa-exchange-alt"></i> 입출금 정보</h3>
+                    <div class="deposit-grid">
+                        <div class="deposit-item">
+                            <span class="deposit-label">네트워크</span>
+                            <span class="deposit-value" id="modalNetwork">Bitcoin (BTC)</span>
+                        </div>
+                        <div class="deposit-item">
+                            <span class="deposit-label">입금 상태</span>
+                            <span class="deposit-value status-active" id="modalDepositStatus">가능</span>
+                        </div>
+                        <div class="deposit-item">
+                            <span class="deposit-label">출금 상태</span>
+                            <span class="deposit-value status-active" id="modalWithdrawStatus">가능</span>
+                        </div>
+                        <div class="deposit-item">
+                            <span class="deposit-label">최소 입금</span>
+                            <span class="deposit-value" id="modalMinDeposit">0.0001 BTC</span>
+                        </div>
+                        <div class="deposit-item">
+                            <span class="deposit-label">출금 수수료</span>
+                            <span class="deposit-value" id="modalWithdrawFee">0.0005 BTC</span>
+                        </div>
+                        <div class="deposit-item">
+                            <span class="deposit-label">출금 한도</span>
+                            <span class="deposit-value" id="modalWithdrawLimit">10 BTC/일</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 차트 섹션 -->
+                <div class="modal-charts">
+                    <h3><i class="fas fa-chart-line"></i> 실시간 차트</h3>
+                    <div class="charts-grid">
+                        <div class="chart-box">
+                            <h4>일간 차트 (KRW)</h4>
+                            <div class="chart-placeholder" id="chart1">
+                                <div class="chart-loading">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    차트 로딩 중...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-box">
+                            <h4>시간별 차트 (USDT)</h4>
+                            <div class="chart-placeholder" id="chart2">
+                                <div class="chart-loading">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    차트 로딩 중...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 추가 정보 -->
+                <div class="additional-info">
+                    <h3><i class="fas fa-info-circle"></i> 추가 정보</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">현재가</span>
+                            <span class="info-value" id="modalCurrentPrice">₩0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">김치프리미엄</span>
+                            <span class="info-value" id="modalKimp">0%</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">24h 변동</span>
+                            <span class="info-value" id="modal24hChange">0%</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">거래대금</span>
+                            <span class="info-value" id="modalVolume">₩0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-primary" id="modalTradeBtn">
+                    <i class="fas fa-exchange-alt"></i> 거래하기
+                </button>
+                <button class="btn-secondary" id="modalCloseBtn">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="js/main.js"></script>
 </body>

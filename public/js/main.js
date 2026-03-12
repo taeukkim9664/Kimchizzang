@@ -246,18 +246,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 업비트 데이터 (모든 종목)
+    // 업비트 데이터 (CORS 프록시 사용)
     async function fetchUpbitData() {
         try {
-            // 모든 마켓 정보 가져오기
-            const marketsResponse = await fetch('https://api.upbit.com/v1/market/all');
+            // CORS 프록시를 통한 업비트 API 호출
+            const proxyUrl = 'https://corsproxy.io/?';
+            const marketsUrl = proxyUrl + encodeURIComponent('https://api.upbit.com/v1/market/all');
+            
+            const marketsResponse = await fetch(marketsUrl);
             const allMarkets = await marketsResponse.json();
             
             // KRW 마켓만 필터링
             const krwMarkets = allMarkets.filter(market => market.market.includes('KRW-'));
             
-            // 100개씩 나눠서 API 호출 (업비트 API 제한)
-            const batchSize = 100;
+            // 50개씩 나눠서 API 호출 (프록시 제한 고려)
+            const batchSize = 50;
             const batches = [];
             
             for (let i = 0; i < krwMarkets.length; i += batchSize) {
@@ -270,12 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const allTickers = [];
             
             for (const marketCodes of batches) {
-                const tickerResponse = await fetch(`https://api.upbit.com/v1/ticker?markets=${marketCodes}`);
+                const tickerUrl = proxyUrl + encodeURIComponent(`https://api.upbit.com/v1/ticker?markets=${marketCodes}`);
+                const tickerResponse = await fetch(tickerUrl);
                 const tickers = await tickerResponse.json();
                 allTickers.push(...tickers);
                 
-                // API 호출 간격 (업비트 제한 방지)
-                await new Promise(resolve => setTimeout(resolve, 100));
+                // API 호출 간격 (프록시 제한 방지)
+                await new Promise(resolve => setTimeout(resolve, 200));
             }
             
             return allTickers.map(ticker => ({
@@ -289,7 +293,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }));
         } catch (error) {
             console.error('업비트 API 오류:', error);
-            return [];
+            // 빗썸 API로 폴백
+            return await fetchBithumbData();
         }
     }
     
@@ -496,14 +501,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let html = '';
         
-        marketData.forEach(item => {
+        marketData.forEach((item, index) => {
             const changeClass = item.change >= 0 ? 'positive' : 'negative';
             const changeSign = item.change >= 0 ? '+' : '';
             const kimpClass = item.kimp >= 0 ? 'positive' : 'negative';
             const kimpSign = item.kimp >= 0 ? '+' : '';
             
             html += `
-                <tr>
+                <tr data-index="${index}" class="coin-row">
                     <td>
                         <span class="coin-name">${item.name}</span>
                     </td>
@@ -516,7 +521,143 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         dataTableBody.innerHTML = html;
+        
+        // 종목 클릭 이벤트 추가
+        document.querySelectorAll('.coin-row').forEach(row => {
+            row.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                const coinData = marketData[index];
+                showCoinModal(coinData);
+            });
+        });
     }
+    
+    // 모달 관련 변수
+    const coinModal = document.getElementById('coinModal');
+    const modalCloseBtn = document.querySelector('.modal-close');
+    const modalCloseBtn2 = document.getElementById('modalCloseBtn');
+    
+    // 모달 닫기 이벤트
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalCloseBtn2.addEventListener('click', closeModal);
+    
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener('click', function(event) {
+        if (event.target === coinModal) {
+            closeModal();
+        }
+    });
+    
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && coinModal.style.display === 'block') {
+            closeModal();
+        }
+    });
+    
+    // 모달 열기
+    function showCoinModal(coinData) {
+        // 모달 데이터 업데이트
+        document.getElementById('modalCoinName').textContent = coinData.name;
+        document.getElementById('modalCurrentPrice').textContent = `₩${coinData.price.toLocaleString()}`;
+        document.getElementById('modalKimp').textContent = `${coinData.kimp >= 0 ? '+' : ''}${coinData.kimp.toFixed(2)}%`;
+        document.getElementById('modalKimp').className = coinData.kimp >= 0 ? 'info-value positive' : 'info-value negative';
+        document.getElementById('modal24hChange').textContent = `${coinData.change >= 0 ? '+' : ''}${coinData.change.toFixed(2)}%`;
+        document.getElementById('modal24hChange').className = coinData.change >= 0 ? 'info-value positive' : 'info-value negative';
+        document.getElementById('modalVolume').textContent = `₩${Math.round(coinData.volume / 1000000).toLocaleString()}백만`;
+        
+        // 입출금 정보 설정 (시뮬레이션)
+        const networks = {
+            'BTC': 'Bitcoin (BTC)',
+            'ETH': 'Ethereum (ERC20)',
+            'XRP': 'Ripple (XRP)',
+            'ADA': 'Cardano (ADA)',
+            'DOGE': 'Dogecoin (DOGE)',
+            'SOL': 'Solana (SOL)',
+            'DOT': 'Polkadot (DOT)',
+            'AVAX': 'Avalanche (AVAX)',
+            'MATIC': 'Polygon (MATIC)',
+            'SHIB': 'Shiba Inu (ERC20)'
+        };
+        
+        const coinSymbol = coinData.name;
+        const network = networks[coinSymbol] || `${coinSymbol} 네트워크`;
+        
+        document.getElementById('modalNetwork').textContent = network;
+        document.getElementById('modalMinDeposit').textContent = `0.0001 ${coinSymbol}`;
+        document.getElementById('modalWithdrawFee').textContent = `0.0005 ${coinSymbol}`;
+        document.getElementById('modalWithdrawLimit').textContent = `10 ${coinSymbol}/일`;
+        
+        // 입출금 상태 (랜덤)
+        const depositStatus = Math.random() > 0.1 ? '가능' : '점검 중';
+        const withdrawStatus = Math.random() > 0.05 ? '가능' : '점검 중';
+        
+        const depositElem = document.getElementById('modalDepositStatus');
+        const withdrawElem = document.getElementById('modalWithdrawStatus');
+        
+        depositElem.textContent = depositStatus;
+        depositElem.className = depositStatus === '가능' ? 'deposit-value status-active' : 'deposit-value status-inactive';
+        
+        withdrawElem.textContent = withdrawStatus;
+        withdrawElem.className = withdrawStatus === '가능' ? 'deposit-value status-active' : 'deposit-value status-inactive';
+        
+        // 차트 생성 (시뮬레이션)
+        createCharts(coinData);
+        
+        // 모달 표시
+        coinModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // 차트 생성 (시뮬레이션)
+    function createCharts(coinData) {
+        const chart1 = document.getElementById('chart1');
+        const chart2 = document.getElementById('chart2');
+        
+        // 차트 로딩 표시 제거
+        chart1.innerHTML = '<div class="chart-simulated">차트 시뮬레이션 (실제 트레이딩뷰 차트 연동 가능)</div>';
+        chart2.innerHTML = '<div class="chart-simulated">차트 시뮬레이션 (실제 트레이딩뷰 차트 연동 가능)</div>';
+        
+        // 실제 트레이딩뷰 차트 연동 예시 (주석 처리)
+        /*
+        new TradingView.widget({
+            "container_id": "chart1",
+            "width": "100%",
+            "height": "250",
+            "symbol": `${coinData.name}KRW`,
+            "interval": "D",
+            "timezone": "Asia/Seoul",
+            "theme": "dark",
+            "style": "1",
+            "locale": "kr"
+        });
+        
+        new TradingView.widget({
+            "container_id": "chart2",
+            "width": "100%",
+            "height": "250",
+            "symbol": `${coinData.name}USDT`,
+            "interval": "60",
+            "timezone": "Asia/Seoul",
+            "theme": "dark",
+            "style": "1",
+            "locale": "kr"
+        });
+        */
+    }
+    
+    // 모달 닫기
+    function closeModal() {
+        coinModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    
+    // 거래하기 버튼 이벤트
+    document.getElementById('modalTradeBtn').addEventListener('click', function() {
+        const coinName = document.getElementById('modalCoinName').textContent;
+        alert(`${coinName} 거래 페이지로 이동합니다.`);
+        // 실제 구현시: window.open(`https://upbit.com/exchange?code=CRIX.UPBIT.KRW-${coinName}`);
+    });
     
     // 에러 표시
     function showError(message) {
