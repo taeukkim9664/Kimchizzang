@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (marketData.length === 0) {
             dataTableBody.innerHTML = `
                 <tr class="loading-row">
-                    <td colspan="5">
+                    <td colspan="6">
                         <div class="loading-spinner">
                             <i class="fas fa-spinner fa-spin"></i>
                             ${exchangeAPIs[selectedDomestic].name}에서 데이터를 불러오는 중...
@@ -501,21 +501,71 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let html = '';
         
+        // 코인 한글명 매핑
+        const koreanNames = {
+            'BTC': '비트코인',
+            'ETH': '이더리움',
+            'XRP': '리플',
+            'ADA': '에이다',
+            'DOGE': '도지코인',
+            'SOL': '솔라나',
+            'DOT': '폴카닷',
+            'AVAX': '아발란체',
+            'MATIC': '폴리곤',
+            'SHIB': '시바이누',
+            'LINK': '체인링크',
+            'UNI': '유니스왑',
+            'AAVE': '에이브',
+            'AXS': '엑시인피니티',
+            'SAND': '샌드박스',
+            'MANA': '디센트럴랜드',
+            'CHZ': '칠리즈',
+            'ENJ': '엔진코인',
+            'WAVES': '웨이브',
+            'KLAY': '클레이튼'
+        };
+        
         marketData.forEach((item, index) => {
             const changeClass = item.change >= 0 ? 'positive' : 'negative';
             const changeSign = item.change >= 0 ? '+' : '';
             const kimpClass = item.kimp >= 0 ? 'positive' : 'negative';
             const kimpSign = item.kimp >= 0 ? '+' : '';
             
+            // 한글명 가져오기
+            const koreanName = koreanNames[item.name] || item.name;
+            
+            // 해외 가격 계산 (시뮬레이션: KRW/USD 환율 1300 기준)
+            const usdPrice = (item.price / 1300).toFixed(2);
+            
+            // 해외 변동률 (시뮬레이션: 국내 변동률과 약간 다르게)
+            const usdChange = item.change + (Math.random() * 2 - 1);
+            const usdChangeClass = usdChange >= 0 ? 'positive' : 'negative';
+            const usdChangeSign = usdChange >= 0 ? '+' : '';
+            
+            // 거래대금 단위 변환
+            const volumeInBillions = Math.round(item.volume / 1000000000);
+            
             html += `
                 <tr data-index="${index}" class="coin-row">
                     <td>
-                        <span class="coin-name">${item.name}</span>
+                        <div class="coin-name">${koreanName}</div>
+                        <div class="coin-symbol">${item.name}</div>
                     </td>
-                    <td>₩${item.price.toLocaleString()}</td>
-                    <td class="${kimpClass}">${kimpSign}${item.kimp.toFixed(2)}%</td>
-                    <td class="${changeClass}">${changeSign}${item.change.toFixed(2)}%</td>
-                    <td>₩${Math.round(item.volume / 1000000).toLocaleString()}백만</td>
+                    <td>
+                        <div class="price-krw">₩${item.price.toLocaleString()}</div>
+                    </td>
+                    <td>
+                        <div class="kimp-value ${kimpClass}">${kimpSign}${item.kimp.toFixed(2)}%</div>
+                    </td>
+                    <td>
+                        <div class="price-usd">$${usdPrice}</div>
+                    </td>
+                    <td>
+                        <div class="change-value ${usdChangeClass}">${usdChangeSign}${usdChange.toFixed(2)}%</div>
+                    </td>
+                    <td>
+                        <div class="volume-krw">${volumeInBillions.toLocaleString()}<span class="volume-unit">억</span></div>
+                    </td>
                 </tr>
             `;
         });
