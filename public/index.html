@@ -1,224 +1,217 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>김프(GIMP) - 무료 이미지 편집 소프트웨어</title>
-    <!-- Critical CSS (인라인) -->
-    <style>
-        /* Critical CSS - 초기 렌더링에 필요한 최소한의 CSS */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', 'Noto Sans KR', sans-serif; color: #1E293B; background: #FFFFFF; line-height: 1.6; }
-        .navbar { background: #F8FAFC; border-bottom: 1px solid #E2E8F0; position: sticky; top: 0; z-index: 1000; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; max-width: 1200px; margin: 0 auto; }
-        .nav-brand .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #1E293B; font-weight: 700; font-size: 1.5rem; }
-        .hero { padding: 4rem 2rem; background: linear-gradient(135deg, #4A90E2 0%, #7B68EE 100%); color: white; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; font-family: 'Poppins', 'Noto Sans KR', sans-serif; }
-        .hero-subtitle { font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.9; }
-        .btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; text-decoration: none; transition: 150ms ease; text-align: center; }
-        .btn-primary { background: #4A90E2; color: white; }
-        .btn-primary:hover { background: #357ABD; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .btn-outline { background: transparent; color: #4A90E2; border: 2px solid #4A90E2; }
-        .btn-outline:hover { background: #4A90E2; color: white; }
-    </style>
-    
-    <!-- 나머지 CSS (지연 로딩) -->
-    <link rel="preload" href="/design-system.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/styles/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="/design-system.css">
-        <link rel="stylesheet" href="/styles/main.css">
-    </noscript>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <title>김치프리미엄(김프) 실시간 차트</title>
+    <link rel="stylesheet" href="css/main.css">
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="/" class="logo">
-                    <span class="logo-icon">🎨</span>
-                    <span class="logo-text">김프(GIMP)</span>
-                </a>
-            </div>
-            
-            <div class="nav-menu">
-                <a href="#features" class="nav-link">기능</a>
-                <a href="#download" class="nav-link">다운로드</a>
-                <a href="#community" class="nav-link">커뮤니티</a>
-                <a href="#docs" class="nav-link">문서</a>
-                <a href="#support" class="nav-link">지원</a>
-            </div>
-            
-            <div class="nav-actions">
-                <button class="btn btn-outline" id="theme-toggle">🌙</button>
-                <button class="btn btn-primary" id="login-btn">로그인</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- 히어로 섹션 -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">무료로 시작하는<br>프로페셔널 이미지 편집</h1>
-                <p class="hero-subtitle">김프(GIMP)는 오픈소스 이미지 편집 소프트웨어로, 포토샵의 강력한 대안입니다.</p>
-                <div class="hero-actions">
-                    <a href="#download" class="btn btn-primary btn-lg">무료 다운로드</a>
-                    <a href="#features" class="btn btn-outline btn-lg">기능 살펴보기</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">2M+</span>
-                        <span class="stat-label">월간 사용자</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">무료</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">20+</span>
-                        <span class="stat-label">언어 지원</span>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div class="image-placeholder">
-                    🎨 김프 인터페이스 미리보기
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 기능 소개 섹션 -->
-    <section class="features" id="features">
+    <!-- 헤더 -->
+    <header class="header">
         <div class="container">
-            <h2 class="section-title">강력한 기능들</h2>
-            <p class="section-subtitle">프로페셔널급 이미지 편집 도구를 무료로 사용해보세요</p>
+            <div class="logo">
+                <h1>김치프리미엄 <span class="highlight">실시간 차트</span></h1>
+                <p class="subtitle">한국과 글로벌 거래소 간 비트코인 가격 차이 분석</p>
+            </div>
             
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🖼️</div>
-                    <h3 class="feature-title">고급 레이어 관리</h3>
-                    <p class="feature-description">다중 레이어, 레이어 마스크, 블렌딩 모드 등 전문가용 기능</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
-                    <h3 class="feature-title">풍부한 브러시</h3>
-                    <p class="feature-description">다양한 브러시와 사용자 정의 가능한 도구 모음</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔧</div>
-                    <h3 class="feature-title">플러그인 지원</h3>
-                    <p class="feature-description">수백 가지 무료 플러그인으로 기능 확장</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3 class="feature-title">크로스 플랫폼</h3>
-                    <p class="feature-description">Windows, macOS, Linux 모두 지원</p>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home" class="active"><i class="fas fa-chart-line"></i> 실시간 차트</a></li>
+                    <li><a href="#analysis"><i class="fas fa-chart-bar"></i> 기술적 분석</a></li>
+                    <li><a href="#exchanges"><i class="fas fa-exchange-alt"></i> 거래소 비교</a></li>
+                    <li><a href="#community"><i class="fas fa-users"></i> 커뮤니티</a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> 정보</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-controls">
+                <button id="themeToggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span>다크모드</span>
+                </button>
+                <div class="real-time-info">
+                    <span class="price-label">현재 김프:</span>
+                    <span class="price-value" id="currentKimp">12.5%</span>
+                    <span class="price-change positive" id="priceChange">+1.2%</span>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- 다운로드 섹션 -->
-    <section class="download" id="download">
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
         <div class="container">
-            <h2 class="section-title">지금 다운로드</h2>
-            <p class="section-subtitle">당신의 운영체제에 맞는 버전을 선택하세요</p>
+            <!-- 실시간 차트 섹션 -->
+            <section id="home" class="chart-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> 김치프리미엄 실시간 차트</h2>
+                    <div class="timeframe-selector">
+                        <button class="timeframe-btn active" data-timeframe="1D">1일</button>
+                        <button class="timeframe-btn" data-timeframe="1W">1주</button>
+                        <button class="timeframe-btn" data-timeframe="1M">1개월</button>
+                        <button class="timeframe-btn" data-timeframe="3M">3개월</button>
+                        <button class="timeframe-btn" data-timeframe="1Y">1년</button>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <!-- TradingView Widget -->
+                    <div class="tradingview-widget-container">
+                        <div id="tradingview_chart"></div>
+                        <script type="text/javascript">
+                        new TradingView.widget({
+                            "width": "100%",
+                            "height": "600",
+                            "symbol": "BTCKRW",
+                            "interval": "D",
+                            "timezone": "Asia/Seoul",
+                            "theme": "light",
+                            "style": "1",
+                            "locale": "kr",
+                            "toolbar_bg": "#f1f3f6",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_chart",
+                            "studies": [
+                                "MACD@tv-basicstudies",
+                                "RSI@tv-basicstudies",
+                                "Volume@tv-basicstudies"
+                            ]
+                        });
+                        </script>
+                    </div>
+                </div>
+                
+                <div class="chart-info">
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> 김치프리미엄이란?</h3>
+                        <p>한국 거래소의 비트코인 가격이 글로벌 거래소보다 높은 현상을 의미합니다. 이는 한국 시장의 수요와 공급, 규제 환경 등에 의해 발생합니다.</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-exchange-alt"></i> 주요 거래소</h3>
+                        <ul class="exchange-list">
+                            <li>업비트 (Upbit)</li>
+                            <li>빗썸 (Bithumb)</li>
+                            <li>코인원 (Coinone)</li>
+                            <li>코빗 (Korbit)</li>
+                            <li>바이낸스 (Binance)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
             
-            <div class="download-options">
-                <div class="download-card">
-                    <div class="os-icon">🪟</div>
-                    <h3>Windows</h3>
-                    <p>Windows 10/11 지원</p>
-                    <button class="btn btn-primary">다운로드</button>
+            <!-- 거래소 비교 섹션 -->
+            <section id="exchanges" class="exchange-section">
+                <h2><i class="fas fa-exchange-alt"></i> 거래소별 김프 비교</h2>
+                <div class="exchange-grid">
+                    <div class="exchange-card">
+                        <div class="exchange-header">
+                            <h3>업비트</h3>
+                            <span class="exchange-kimp positive">+13.2%</span>
+                        </div>
+                        <div class="exchange-price">
+                            <span class="price">₩98,500,000</span>
+                            <span class="volume">24h 볼륨: ₩1.2조</span>
+                        </div>
+                    </div>
+                    <div class="exchange-card">
+                        <div class="exchange-header">
+                            <h3>빗썸</h3>
+                            <span class="exchange-kimp positive">+12.8%</span>
+                        </div>
+                        <div class="exchange-price">
+                            <span class="price">₩98,200,000</span>
+                            <span class="volume">24h 볼륨: ₩0.9조</span>
+                        </div>
+                    </div>
+                    <div class="exchange-card">
+                        <div class="exchange-header">
+                            <h3>코인원</h3>
+                            <span class="exchange-kimp positive">+12.5%</span>
+                        </div>
+                        <div class="exchange-price">
+                            <span class="price">₩97,800,000</span>
+                            <span class="volume">24h 볼륨: ₩0.6조</span>
+                        </div>
+                    </div>
+                    <div class="exchange-card">
+                        <div class="exchange-header">
+                            <h3>바이낸스</h3>
+                            <span class="exchange-kimp neutral">기준</span>
+                        </div>
+                        <div class="exchange-price">
+                            <span class="price">₩86,500,000</span>
+                            <span class="volume">24h 볼륨: ₩15.3조</span>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="download-card">
-                    <div class="os-icon">🍎</div>
-                    <h3>macOS</h3>
-                    <p>macOS 10.15+ 지원</p>
-                    <button class="btn btn-primary">다운로드</button>
+            </section>
+            
+            <!-- 커뮤니티 섹션 -->
+            <section id="community" class="community-section">
+                <h2><i class="fas fa-users"></i> 김프 커뮤니티</h2>
+                <div class="community-content">
+                    <div class="community-card">
+                        <h3><i class="fas fa-comments"></i> 실시간 토론</h3>
+                        <div class="chat-preview">
+                            <div class="chat-message">
+                                <span class="user">김프매니아:</span>
+                                <span class="message">오늘 김프 13% 돌파했네요!</span>
+                            </div>
+                            <div class="chat-message">
+                                <span class="user">트레이더K:</span>
+                                <span class="message">주말이라서 더 올라갈 것 같아요</span>
+                            </div>
+                            <div class="chat-message">
+                                <span class="user">코인초보:</span>
+                                <span class="message">김프가 높을 때 매수하는 게 좋을까요?</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="community-card">
+                        <h3><i class="fas fa-newspaper"></i> 최신 뉴스</h3>
+                        <ul class="news-list">
+                            <li>한국 거래소, 비트코인 거래량 신기록</li>
+                            <li>김치프리미엄, 3개월 만에 최고치</li>
+                            <li>해외 투자자 한국 시장 관심 증가</li>
+                            <li>규제 환경 변화 예상</li>
+                        </ul>
+                    </div>
                 </div>
-                
-                <div class="download-card">
-                    <div class="os-icon">🐧</div>
-                    <h3>Linux</h3>
-                    <p>대부분의 배포판 지원</p>
-                    <button class="btn btn-primary">다운로드</button>
-                </div>
-            </div>
+            </section>
         </div>
-    </section>
+    </main>
 
     <!-- 푸터 -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-icon">🎨</span>
-                        <span class="logo-text">김프(GIMP)</span>
-                    </div>
-                    <p class="footer-description">무료 오픈소스 이미지 편집 소프트웨어</p>
+                <div class="footer-section">
+                    <h3>김치프리미엄 차트</h3>
+                    <p>실시간 김치프리미엄 데이터와 분석을 제공합니다.</p>
+                    <p>참고 사이트: theddari.com, kimpga.com</p>
                 </div>
-                
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>다운로드</h4>
-                        <a href="#">Windows</a>
-                        <a href="#">macOS</a>
-                        <a href="#">Linux</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>커뮤니티</h4>
-                        <a href="#">포럼</a>
-                        <a href="#">위키</a>
-                        <a href="#">기여하기</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>지원</h4>
-                        <a href="#">문서</a>
-                        <a href="#">튜토리얼</a>
-                        <a href="#">FAQ</a>
-                    </div>
+                <div class="footer-section">
+                    <h3>주의사항</h3>
+                    <p>이 사이트의 정보는 투자 조언이 아닙니다.<br>암호화폐 투자는 높은 위험을 수반합니다.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>연락처</h3>
+                    <p>문의: info@kimchizzang.com</p>
+                    <p>업데이트: 2026년 3월 13일</p>
                 </div>
             </div>
-            
             <div class="footer-bottom">
-                <p>© 2026 김프(GIMP) 프로젝트. 모든 권리 보유.</p>
-                <div class="footer-social">
-                    <a href="#" class="social-link">GitHub</a>
-                    <a href="#" class="social-link">Twitter</a>
-                    <a href="#" class="social-link">Discord</a>
-                </div>
+                <p>&copy; 2026 김치프리미엄 차트. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="/src/js/main.js"></script>
-    <script>
-        // 테마 토글 기능
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            this.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        });
-        
-        // 로그인 버튼
-        document.getElementById('login-btn').addEventListener('click', function() {
-            alert('로그인 기능 준비 중입니다!');
-        });
-    </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
