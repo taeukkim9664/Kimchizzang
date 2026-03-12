@@ -1,4 +1,4 @@
-// 김치프리미엄 웹사이트 메인 JavaScript - 더따리 스타일
+// 김치짱 - 김치프리미엄 실시간 차트
 
 document.addEventListener('DOMContentLoaded', function() {
     // 상태 변수
@@ -6,6 +6,75 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSort = { column: 'kimp', direction: 'desc' };
     let updateInterval = 1000; // 기본 1초
     let updateTimer = null;
+    let selectedDomestic = 'upbit';
+    let selectedForeign = 'binance';
+    
+    // 거래소 API 엔드포인트
+    const exchangeAPIs = {
+        // 국내 거래소
+        upbit: {
+            name: '업비트',
+            markets: 'https://api.upbit.com/v1/market/all',
+            ticker: 'https://api.upbit.com/v1/ticker?markets='
+        },
+        bithumb: {
+            name: '빗썸',
+            markets: 'https://api.bithumb.com/public/ticker/ALL',
+            ticker: 'https://api.bithumb.com/public/ticker/'
+        },
+        coinone: {
+            name: '코인원',
+            markets: 'https://api.coinone.co.kr/public/v2/ticker_new/KRW',
+            ticker: 'https://api.coinone.co.kr/public/v2/ticker_new/KRW/'
+        },
+        gopax: {
+            name: '고팍스',
+            markets: 'https://api.gopax.co.kr/trading-pairs',
+            ticker: 'https://api.gopax.co.kr/trading-pairs/'
+        },
+        
+        // 해외 거래소
+        binance: {
+            name: '바이낸스',
+            ticker: 'https://api.binance.com/api/v3/ticker/price'
+        },
+        binance_futures: {
+            name: '바이낸스선물',
+            ticker: 'https://fapi.binance.com/fapi/v1/ticker/price'
+        },
+        okx: {
+            name: 'OKX',
+            ticker: 'https://www.okx.com/api/v5/market/tickers?instType=SPOT'
+        },
+        okx_futures: {
+            name: 'OKX선물',
+            ticker: 'https://www.okx.com/api/v5/market/tickers?instType=FUTURES'
+        },
+        bybit: {
+            name: '바이빗',
+            ticker: 'https://api.bybit.com/v5/market/tickers?category=spot'
+        },
+        bybit_futures: {
+            name: '바이빗선물',
+            ticker: 'https://api.bybit.com/v5/market/tickers?category=linear'
+        },
+        bitget: {
+            name: '비트겟',
+            ticker: 'https://api.bitget.com/api/v2/spot/market/tickers'
+        },
+        bitget_futures: {
+            name: '비트겟선물',
+            ticker: 'https://api.bitget.com/api/v2/mix/market/tickers'
+        },
+        gate: {
+            name: '게이트',
+            ticker: 'https://api.gateio.ws/api/v4/spot/tickers'
+        },
+        gate_futures: {
+            name: '게이트선물',
+            ticker: 'https://api.gateio.ws/api/v4/futures/usdt/tickers'
+        }
+    };
     
     // DOM 요소
     const themeToggle = document.getElementById('themeToggle');
@@ -46,8 +115,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 거래소 선택 이벤트
-    domesticExchange.addEventListener('change', updateData);
-    foreignExchange.addEventListener('change', updateData);
+    domesticExchange.addEventListener('change', function() {
+        selectedDomestic = this.value;
+        updateData();
+    });
+    
+    foreignExchange.addEventListener('change', function() {
+        selectedForeign = this.value;
+        updateData();
+    });
     
     // 업데이트 주기 설정
     updateIntervalSelect.addEventListener('change', function() {
@@ -133,24 +209,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // 데이터 업데이트 함수
     async function updateData() {
         try {
-            // 업비트 API에서 마켓 데이터 가져오기
-            const marketsResponse = await fetch('https://api.upbit.com/v1/market/all');
-            const allMarkets = await marketsResponse.json();
+            // 국내 거래소 데이터 가져오기
+            const domesticData = await fetchDomesticData();
             
-            // KRW 마켓만 필터링
-            const krwMarkets = allMarkets.filter(market => market.market.includes('KRW-'));
-            
-            if (krwMarkets.length === 0) {
-                throw new Error('KRW 마켓 데이터를 찾을 수 없습니다.');
-            }
-            
-            // 티커 데이터 가져오기
-            const marketCodes = krwMarkets.slice(0, 50).map(m => m.market).join(',');
-            const tickerResponse = await fetch(`https://api.upbit.com/v1/ticker?markets=${marketCodes}`);
-            const tickers = await tickerResponse.json();
+            // 해외 거래소 데이터 가져오기
+            const foreignData = await fetchForeignData();
             
             // 데이터 처리
-            processMarketData(tickers);
+            processMarketData(domesticData, foreignData);
             
             // 마지막 업데이트 시간 표시
             const now = new Date();
@@ -162,46 +228,254 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // 국내 거래소 데이터 가져오기
+    async function fetchDomesticData() {
+        const exchange = exchangeAPIs[selectedDomestic];
+        
+        switch(selectedDomestic) {
+            case 'upbit':
+                return await fetchUpbitData();
+            case 'bithumb':
+                return await fetchBithumbData();
+            case 'coinone':
+                return await fetchCoinoneData();
+            case 'gopax':
+                return await fetchGopaxData();
+            default:
+                return await fetchUpbitData();
+        }
+    }
+    
+    // 업비트 데이터 (모든 종목)
+    async function fetchUpbitData() {
+        try {
+            // 모든 마켓 정보 가져오기
+            const marketsResponse = await fetch('https://api.upbit.com/v1/market/all');
+            const allMarkets = await marketsResponse.json();
+            
+            // KRW 마켓만 필터링
+            const krwMarkets = allMarkets.filter(market => market.market.includes('KRW-'));
+            
+            // 100개씩 나눠서 API 호출 (업비트 API 제한)
+            const batchSize = 100;
+            const batches = [];
+            
+            for (let i = 0; i < krwMarkets.length; i += batchSize) {
+                const batch = krwMarkets.slice(i, i + batchSize);
+                const marketCodes = batch.map(m => m.market).join(',');
+                batches.push(marketCodes);
+            }
+            
+            // 모든 배치 데이터 가져오기
+            const allTickers = [];
+            
+            for (const marketCodes of batches) {
+                const tickerResponse = await fetch(`https://api.upbit.com/v1/ticker?markets=${marketCodes}`);
+                const tickers = await tickerResponse.json();
+                allTickers.push(...tickers);
+                
+                // API 호출 간격 (업비트 제한 방지)
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            return allTickers.map(ticker => ({
+                symbol: ticker.market.replace('KRW-', ''),
+                name: ticker.market,
+                price: ticker.trade_price,
+                change: (ticker.signed_change_rate || 0) * 100,
+                volume: ticker.acc_trade_price_24h,
+                high: ticker.high_price,
+                low: ticker.low_price
+            }));
+        } catch (error) {
+            console.error('업비트 API 오류:', error);
+            return [];
+        }
+    }
+    
+    // 빗썸 데이터 (시뮬레이션)
+    async function fetchBithumbData() {
+        try {
+            const response = await fetch('https://api.bithumb.com/public/ticker/ALL');
+            const data = await response.json();
+            
+            const tickers = [];
+            for (const [symbol, info] of Object.entries(data.data)) {
+                if (symbol !== 'date') {
+                    tickers.push({
+                        symbol: symbol,
+                        name: symbol,
+                        price: parseFloat(info.closing_price),
+                        change: parseFloat(info.fluctate_rate_24H),
+                        volume: parseFloat(info.acc_trade_value_24H),
+                        high: parseFloat(info.max_price),
+                        low: parseFloat(info.min_price)
+                    });
+                }
+            }
+            
+            return tickers;
+        } catch (error) {
+            console.error('빗썸 API 오류:', error);
+            return [];
+        }
+    }
+    
+    // 코인원 데이터 (시뮬레이션)
+    async function fetchCoinoneData() {
+        try {
+            const response = await fetch('https://api.coinone.co.kr/public/v2/ticker_new/KRW');
+            const data = await response.json();
+            
+            return data.tickers.map(ticker => ({
+                symbol: ticker.target_currency,
+                name: ticker.target_currency,
+                price: parseFloat(ticker.last),
+                change: parseFloat(ticker.yesterday_diff),
+                volume: parseFloat(ticker.volume),
+                high: parseFloat(ticker.high),
+                low: parseFloat(ticker.low)
+            }));
+        } catch (error) {
+            console.error('코인원 API 오류:', error);
+            return [];
+        }
+    }
+    
+    // 고팍스 데이터 (시뮬레이션)
+    async function fetchGopaxData() {
+        try {
+            const response = await fetch('https://api.gopax.co.kr/trading-pairs');
+            const pairs = await response.json();
+            
+            const tickers = [];
+            for (const pair of pairs) {
+                if (pair.quoteAsset === 'KRW') {
+                    const tickerResponse = await fetch(`https://api.gopax.co.kr/trading-pairs/${pair.name}/ticker`);
+                    const ticker = await tickerResponse.json();
+                    
+                    tickers.push({
+                        symbol: pair.baseAsset,
+                        name: pair.name,
+                        price: parseFloat(ticker.price),
+                        change: 0, // API에 변동률 정보 없음
+                        volume: parseFloat(ticker.volume),
+                        high: parseFloat(ticker.high),
+                        low: parseFloat(ticker.low)
+                    });
+                }
+            }
+            
+            return tickers;
+        } catch (error) {
+            console.error('고팍스 API 오류:', error);
+            return [];
+        }
+    }
+    
+    // 해외 거래소 데이터 가져오기
+    async function fetchForeignData() {
+        const exchange = exchangeAPIs[selectedForeign];
+        
+        try {
+            const response = await fetch(exchange.ticker);
+            const data = await response.json();
+            
+            // 각 거래소별 데이터 파싱
+            switch(selectedForeign) {
+                case 'binance':
+                case 'binance_futures':
+                    return data.map(item => ({
+                        symbol: item.symbol,
+                        price: parseFloat(item.price)
+                    }));
+                case 'okx':
+                case 'okx_futures':
+                    return data.data.map(item => ({
+                        symbol: item.instId,
+                        price: parseFloat(item.last)
+                    }));
+                case 'bybit':
+                case 'bybit_futures':
+                    return data.result.list.map(item => ({
+                        symbol: item.symbol,
+                        price: parseFloat(item.lastPrice)
+                    }));
+                case 'bitget':
+                case 'bitget_futures':
+                    return data.data.map(item => ({
+                        symbol: item.symbol,
+                        price: parseFloat(item.last)
+                    }));
+                case 'gate':
+                case 'gate_futures':
+                    return data.map(item => ({
+                        symbol: item.currency_pair,
+                        price: parseFloat(item.last)
+                    }));
+                default:
+                    return [];
+            }
+        } catch (error) {
+            console.error(`${exchange.name} API 오류:`, error);
+            return [];
+        }
+    }
+    
     // 마켓 데이터 처리
-    function processMarketData(tickers) {
-        marketData = tickers.map(ticker => {
-            const changeRate = ((ticker.signed_change_rate || 0) * 100);
-            const kimpValue = calculateKimp(ticker.trade_price); // 김프 계산 (시뮬레이션)
+    function processMarketData(domesticData, foreignData) {
+        // 해외 거래소 데이터를 심볼별로 매핑
+        const foreignPriceMap = {};
+        foreignData.forEach(item => {
+            const symbol = item.symbol.replace('USDT', '').replace('KRW', '');
+            foreignPriceMap[symbol] = item.price;
+        });
+        
+        // 김치프리미엄 계산
+        marketData = domesticData.map(item => {
+            const foreignPrice = foreignPriceMap[item.symbol] || 1300; // 기본값
+            const kimp = calculateKimp(item.price, foreignPrice);
             
             return {
-                name: ticker.market.replace('KRW-', ''),
-                symbol: ticker.market,
-                price: ticker.trade_price,
-                kimp: kimpValue,
-                change: changeRate,
-                volume: ticker.acc_trade_price_24h
+                name: item.symbol,
+                symbol: item.symbol,
+                price: item.price,
+                kimp: kimp,
+                change: item.change,
+                volume: item.volume,
+                high: item.high,
+                low: item.low
             };
         });
         
         // 김프 평균 계산 (상단 표시용)
-        const avgKimp = marketData.reduce((sum, item) => sum + item.kimp, 0) / marketData.length;
-        currentKimp.textContent = `${avgKimp.toFixed(2)}%`;
-        
-        // 김프 변화 계산 (시뮬레이션)
-        const kimpChange = (Math.random() - 0.5) * 0.5;
-        const changeType = kimpChange >= 0 ? 'positive' : 'negative';
-        const changeText = kimpChange >= 0 ? `+${kimpChange.toFixed(2)}%` : `${kimpChange.toFixed(2)}%`;
-        
-        priceChange.textContent = changeText;
-        priceChange.className = `price-change ${changeType}`;
+        if (marketData.length > 0) {
+            const avgKimp = marketData.reduce((sum, item) => sum + item.kimp, 0) / marketData.length;
+            currentKimp.textContent = `${avgKimp.toFixed(2)}%`;
+            
+            // 김프 변화 계산 (시뮬레이션)
+            const kimpChange = (Math.random() - 0.5) * 0.5;
+            const changeType = kimpChange >= 0 ? 'positive' : 'negative';
+            const changeText = kimpChange >= 0 ? `+${kimpChange.toFixed(2)}%` : `${kimpChange.toFixed(2)}%`;
+            
+            priceChange.textContent = changeText;
+            priceChange.className = `price-change ${changeType}`;
+        }
         
         // 데이터 정렬 및 테이블 업데이트
         sortData();
         updateTable();
     }
     
-    // 김프 계산 (시뮬레이션)
-    function calculateKimp(price) {
-        // 실제 김프 계산 로직 (시뮬레이션)
-        // 실제 구현시에는 국내/해외 거래소 가격 비교 필요
-        const basePrice = 1300; // USDT 기준 가격 (시뮬레이션)
-        const kimp = ((price / basePrice - 1) * 100) + (Math.random() * 5 - 2.5);
-        return Math.max(5, Math.min(20, kimp)); // 5%~20% 사이로 제한
+    // 김치프리미엄 계산
+    function calculateKimp(domesticPrice, foreignPrice) {
+        if (!foreignPrice || foreignPrice === 0) return 0;
+        
+        // 환율 고려 (1 USDT = 1300원 가정)
+        const exchangeRate = 1300;
+        const kimp = ((domesticPrice / (foreignPrice * exchangeRate)) - 1) * 100;
+        
+        return Math.max(-10, Math.min(30, kimp)); // -10%~30% 사이로 제한
     }
     
     // 테이블 업데이트
@@ -212,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td colspan="5">
                         <div class="loading-spinner">
                             <i class="fas fa-spinner fa-spin"></i>
-                            데이터를 불러오는 중...
+                            ${exchangeAPIs[selectedDomestic].name}에서 데이터를 불러오는 중...
                         </div>
                     </td>
                 </tr>
@@ -225,15 +499,16 @@ document.addEventListener('DOMContentLoaded', function() {
         marketData.forEach(item => {
             const changeClass = item.change >= 0 ? 'positive' : 'negative';
             const changeSign = item.change >= 0 ? '+' : '';
+            const kimpClass = item.kimp >= 0 ? 'positive' : 'negative';
+            const kimpSign = item.kimp >= 0 ? '+' : '';
             
             html += `
                 <tr>
                     <td>
                         <span class="coin-name">${item.name}</span>
-                        <span class="coin-symbol">${item.symbol}</span>
                     </td>
                     <td>₩${item.price.toLocaleString()}</td>
-                    <td class="${item.kimp >= 10 ? 'positive' : 'negative'}">${item.kimp.toFixed(2)}%</td>
+                    <td class="${kimpClass}">${kimpSign}${item.kimp.toFixed(2)}%</td>
                     <td class="${changeClass}">${changeSign}${item.change.toFixed(2)}%</td>
                     <td>₩${Math.round(item.volume / 1000000).toLocaleString()}백만</td>
                 </tr>
@@ -249,7 +524,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <tr class="error-row">
                 <td colspan="5" style="text-align: center; padding: 2rem; color: var(--negative-color);">
                     <i class="fas fa-exclamation-triangle"></i><br>
-                    ${message}
+                    ${message}<br>
+                    <small>잠시 후 다시 시도해주세요.</small>
                 </td>
             </tr>
         `;
@@ -266,8 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    console.log('김치프리미엄 웹사이트 로드 완료');
-    console.log('더따리(theddari.com) 스타일 구현');
-    console.log('업비트 API 연동 완료');
+    console.log('김치짱 웹사이트 로드 완료');
+    console.log('거래소 API 연동:', selectedDomestic, selectedForeign);
     console.log(`업데이트 주기: ${updateInterval}ms`);
 });
